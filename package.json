@@ -1,0 +1,11 @@
+{
+  "name": "du-workshop",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/guillaumewuip/du-workshop",
+  "author": "Guillaume Wuip <guillaume@wuips.com>",
+  "license": "MIT",
+  "dependencies": {
+    "onoff": "^1.1.7"
+  }
+}
