@@ -1,27 +1,30 @@
 const Gpio = require('onoff').Gpio;
 
-const
-  ON  = 1,
-  OFF = 0;
+const ON_INTERVAL = 4000;
 
 const led4 = new Gpio(4, 'out');
 const button17 = new Gpio(17, 'in', 'both');
 
-const blink = (led, value = 1) => {
+const actionLed = (value) => (led) => {
   led.write(value, () => {
-    console.log(`led ${value}`)
-    setTimeout(() => blink(led, value ? 0 : 1), 1000);
+    console.log(`led ${value}`);
   });
 };
 
-blink(led4, 1);
+const
+  on = actionLed(1),
+  off = actionLed(0);
 
-button17.watch((err, value) => {
+off(led4);
+
+setInterval(() => on(led4), ON_INTERVAL);
+
+button17.watch((err) => {
   if (err) {
-    console.error(err);
+    console.error('button error', err);
   }
 
-  console.log('button change', value);
+  off(led4);
 });
 
 process.on('SIGINT', () => {
