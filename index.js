@@ -4,11 +4,17 @@ const
   ON  = 1,
   OFF = 0;
 
-const led = new Gpio(4, 'out');
+const led4 = new Gpio(4, 'out');
 
+const blink = (led, value = 1) => {
+  led.write(value, () => {
+    console.log(`led ${value}`)
+    setTimeout(() => blink(led, value ? 0 : 1), 1000);
+  });
+};
 
-led.write(ON, () => console.log('led ON'));
+blink(led4, 1);
 
-process.on('SIGINT', function () {
-  led.unexport();
+process.on('SIGINT', () => {
+  led4.unexport();
 });
