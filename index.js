@@ -5,6 +5,7 @@ const
   OFF = 0;
 
 const led4 = new Gpio(4, 'out');
+const button17 = new Gpio(17, 'in', 'both');
 
 const blink = (led, value = 1) => {
   led.write(value, () => {
@@ -14,6 +15,14 @@ const blink = (led, value = 1) => {
 };
 
 blink(led4, 1);
+
+button17.watch((err, value) => {
+  if (err) {
+    console.error(err);
+  }
+
+  console.log('button change', value);
+});
 
 process.on('SIGINT', () => {
   led4.unexport();
