@@ -34,7 +34,7 @@ module.exports = (config) => ({
   readSpreadsheeet: () => readSpreadsheeet(FILE),
   random: () => readSpreadsheeet(FILE)
     .then((quotes) => {
-      const index = random(quotes.length);
+      const index = random(quotes.length - 1);
       return formatQuote(quotes[index]);
     }),
 });
