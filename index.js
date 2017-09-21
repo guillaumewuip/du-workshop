@@ -1,10 +1,14 @@
 
 const dotenv        = require('dotenv');
 const Twit          = require('twit');
+const schedule      = require('node-schedule');
 const quotesWrapper = require('./quotes');
 const twitterHelper = require('./twitter');
+const buttonHelper  = require('./button');
 
 dotenv.config();
+
+const TIME_TO_TOUCH = .5 * 60 * 1000; // time to desactivate the button
 
 const
   SPREADSHEET_ID = (() => {
@@ -80,4 +84,31 @@ const sendRandomQuote = (T) => {
     });
 };
 
-sendRandomQuote(T);
+const timeout = {
+  _timeout: null,
+  clear: () => {
+    if (timeout._timeout) {
+      clearTimeout(timeout._timeout);
+    }
+  },
+  setTimeout: (callback, time) => {
+    timeout._timeout = setTimeout(callback, time);
+  },
+};
+
+buttonHelper.watch((err) => {
+  if (err) {
+    console.error(err);
+  }
+
+  timeout.clear();
+  buttonHelper.off();
+});
+
+schedule.scheduleJob('0 */2 8-18 * * *', () => { // TODO remove every 4 min
+  buttonHelper.on();
+  timeout.setTimeout(() => {
+    sendRandomQuote(T);
+  }, TIME_TO_TOUCH);
+});
+

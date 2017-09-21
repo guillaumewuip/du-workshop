@@ -12,12 +12,10 @@ const actionLed = (value) => (led) => {
 };
 
 const
-  on = actionLed(1),
+  on  = actionLed(1),
   off = actionLed(0);
 
 off(led4);
-
-setInterval(() => on(led4), ON_INTERVAL);
 
 button17.watch((err) => {
   if (err) {
@@ -30,3 +28,11 @@ button17.watch((err) => {
 process.on('SIGINT', () => {
   led4.unexport();
 });
+
+module.exports = {
+  on:    () => on(led4),
+  off:   () => off(led4),
+  watch: (callback) => {
+    button17.watch(callback);
+  },
+};
