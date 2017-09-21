@@ -5,6 +5,7 @@ const schedule      = require('node-schedule');
 const quotesWrapper = require('./quotes');
 const twitterHelper = require('./twitter');
 const buttonHelper  = require('./button');
+const soundHelper   = require('./sounds');
 
 dotenv.config();
 
@@ -108,6 +109,7 @@ buttonHelper.watch((err) => {
 
   timeout.clear();
   buttonHelper.off();
+  soundHelper.playRandom();
 });
 
 schedule.scheduleJob('0 */2 8-18 * * *', () => { // TODO remove every 4 min
