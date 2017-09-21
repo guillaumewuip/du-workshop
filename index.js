@@ -92,14 +92,17 @@ const sendRandomQuote = (T) => {
 };
 
 const timeout = {
+  isSet: false,
   _timeout: null,
   clear: () => {
     if (timeout._timeout) {
       clearTimeout(timeout._timeout);
+      timeout.isSet = false;
     }
   },
   setTimeout: (callback, time) => {
     timeout._timeout = setTimeout(callback, time);
+    timeout.isSet = true;
   },
 };
 
@@ -108,9 +111,11 @@ const watchHandler = (err) => {
     console.error(err);
   }
 
-  timeout.clear();
-  buttonHelper.off();
-  soundHelper.playRandom();
+  if (timeout.isSet) {
+    timeout.clear();
+    soundHelper.playRandom();
+    buttonHelper.off();
+  }
 };
 
 buttonHelper.watch(debounce(watchHandler, 500));
