@@ -1,32 +1,28 @@
-const Gpio = require('onoff').Gpio;
 
-const ON_INTERVAL = 4000;
+const dotenv = require('dotenv');
+const quotesWrapper = require('./quotes');
 
-const led4 = new Gpio(4, 'out');
-const button17 = new Gpio(17, 'in', 'both');
+dotenv.config();
 
-const actionLed = (value) => (led) => {
-  led.write(value, () => {
-    console.log(`led ${value}`);
-  });
-};
-
-const
-  on = actionLed(1),
-  off = actionLed(0);
-
-off(led4);
-
-setInterval(() => on(led4), ON_INTERVAL);
-
-button17.watch((err) => {
-  if (err) {
-    console.error('button error', err);
+const SPREADSHEET_ID = (() => {
+  if (!process.env.SPREADSHEET_ID) {
+    throw new Error('Need SPREADSHEET_ID env var');
   }
 
-  off(led4);
-});
+  return process.env.SPREADSHEET_ID;
+})();
 
-process.on('SIGINT', () => {
-  led4.unexport();
-});
+const GOOGLE_API_KEY = (() => {
+  if (!process.env.GOOGLE_API_KEY) {
+    throw new Error('Need GOOGLE_API_KEY env var');
+  }
+
+  return process.env.GOOGLE_API_KEY;
+})();
+
+const quotes = quotesWrapper({ SPREADSHEET_ID, GOOGLE_API_KEY });
+
+quotes
+  .random()
+  .then(console.log)
+  .catch(console.error);
