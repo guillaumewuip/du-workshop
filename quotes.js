@@ -14,6 +14,7 @@ const readSpreadsheeet = (file) => {
 
       csv.parse(data, (err, rows) => {
         console.log(rows);
+        rows.shift()
         resolve(rows);
       });
     });

@@ -9,6 +9,7 @@ const buttonHelper  = require('./button');
 dotenv.config();
 
 const TIME_TO_TOUCH = .5 * 60 * 1000; // time to desactivate the button
+const TWITTER_MENTION = '@guillaumewuip';
 
 const
   SPREADSHEET_ID = (() => {
@@ -73,6 +74,10 @@ const sendTweets = (T, id) => {
 
 const sendRandomQuote = (T) => {
   quotes.random()
+    .then((msg) => ({
+      content: `${TWITTER_MENTION} ${msg.content}`,
+      author:  msg.author,
+    }))
     .then(twitterHelper.buildQuote)
     .then(twitterHelper.buildTweets)
     .then(sendTweets(T))
