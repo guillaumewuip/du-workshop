@@ -2,6 +2,7 @@
 const dotenv        = require('dotenv');
 const Twit          = require('twit');
 const schedule      = require('node-schedule');
+const debounce      = require('debounce');
 const quotesWrapper = require('./quotes');
 const twitterHelper = require('./twitter');
 const buttonHelper  = require('./button');
@@ -102,7 +103,7 @@ const timeout = {
   },
 };
 
-buttonHelper.watch((err) => {
+const watchHandler = (err) => {
   if (err) {
     console.error(err);
   }
@@ -110,7 +111,9 @@ buttonHelper.watch((err) => {
   timeout.clear();
   buttonHelper.off();
   soundHelper.playRandom();
-});
+};
+
+buttonHelper.watch(debounce(watchHandler, 500));
 
 schedule.scheduleJob('0 */2 8-18 * * *', () => { // TODO remove every 4 min
   buttonHelper.on();
