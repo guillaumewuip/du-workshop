@@ -120,10 +120,13 @@ const watchHandler = (err) => {
 
 buttonHelper.watch(debounce(watchHandler, 500));
 
-schedule.scheduleJob('0 */2 8-18 * * *', () => { // TODO remove every 4 min
+const fire = () => {
   buttonHelper.on();
   timeout.setTimeout(() => {
     sendRandomQuote(T);
   }, TIME_TO_TOUCH);
-});
+};
+
+schedule.scheduleJob('0 */2 8-18 * * *', fire); // TODO remove every 2 min
+fire();
 
