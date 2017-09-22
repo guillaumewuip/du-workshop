@@ -127,6 +127,6 @@ const fire = () => {
   }, TIME_TO_TOUCH);
 };
 
-schedule.scheduleJob('0 */2 8-18 * * *', fire); // TODO remove every 2 min
+schedule.scheduleJob('0 */2 6-16 * * *', fire); // TODO remove every 2 min
 fire();
 
